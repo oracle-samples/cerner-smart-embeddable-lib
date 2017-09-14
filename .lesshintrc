@@ -1,0 +1,8 @@
+// OPTIONS: https://github.com/lesshint/lesshint/blob/master/lib/linters/README.md
+{
+  "fileExtensions": [".less"],
+  "qualifyingElement": {
+    "allowWithAttribute": true
+  },
+  "emptyRule": true
+}
