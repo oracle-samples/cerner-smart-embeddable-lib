@@ -39,6 +39,15 @@ const CernerSmartEmbeddableLib = {
       CernerSmartEmbeddableLib.setFrameHeight(height);
     });
   },
+
+  /**
+  * Allow application (provider) to send message to the parent frame (consumer).
+  * eventName - event name used as key, must not be null or empty
+  * option - option hash {} with keys and values to pass to the consumer
+  */
+  triggerEvent: (eventName, option) => {
+    Provider.trigger(eventName, option);
+  },
 };
 
 export default CernerSmartEmbeddableLib;

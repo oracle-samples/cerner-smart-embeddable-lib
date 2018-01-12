@@ -42,4 +42,22 @@ describe('CernerSmartEmbeddableLib', () => {
       expect(Provider.on).toHaveBeenCalledWith('iframeCustomResizer', jasmine.any(Function))
     });
   });
+
+  describe('triggerEvent', () => {
+    it('call trigger API on Provider object with valid option', () => {
+      spyOn(Provider, 'trigger');
+      SmartEmbeddedContent.triggerEvent('testEventName', {key: 'value1'});
+
+      const option = {key: 'value1'};
+      expect(Provider.trigger).toHaveBeenCalledWith('testEventName', option);
+    });
+
+    it('call trigger API on Provider object with null option', () => {
+      spyOn(Provider, 'trigger');
+      SmartEmbeddedContent.triggerEvent('testEventName', null);
+
+      const option = null;
+      expect(Provider.trigger).toHaveBeenCalledWith('testEventName', option);
+    });
+  });
 });

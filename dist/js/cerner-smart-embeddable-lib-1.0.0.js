@@ -913,6 +913,7 @@ _cernerSmartEmbeddableLib2.default.listenForCustomFrameHeight();
 
 window.CernerSmartEmbeddableLib = window.CernerSmartEmbeddableLib || {};
 window.CernerSmartEmbeddableLib.calcFrameHeight = _cernerSmartEmbeddableLib2.default.calcFrameHeight;
+window.CernerSmartEmbeddableLib.triggerEvent = _cernerSmartEmbeddableLib2.default.triggerEvent;
 
 /***/ }),
 /* 46 */
@@ -969,6 +970,15 @@ var CernerSmartEmbeddableLib = {
       var height = window.CernerSmartEmbeddableLib.calcFrameHeight() + 'px';
       CernerSmartEmbeddableLib.setFrameHeight(height);
     });
+  },
+
+  /**
+  * Allow application (provider) to send message to the parent frame (consumer).
+  * eventName - event name used as key, must not be null or empty
+  * option - option hash {} with keys and values to pass to the consumer
+  */
+  triggerEvent: function triggerEvent(eventName, option) {
+    _provider2.default.trigger(eventName, option);
   }
 }; /* global window */
 
