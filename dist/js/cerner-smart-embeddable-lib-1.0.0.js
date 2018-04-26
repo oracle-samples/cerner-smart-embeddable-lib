@@ -96,7 +96,7 @@ $exports.store = store;
 /* 2 */
 /***/ (function(module, exports) {
 
-var core = module.exports = { version: '2.5.3' };
+var core = module.exports = { version: '2.5.5' };
 if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
 
 
@@ -128,6 +128,7 @@ var global = __webpack_require__(0);
 var core = __webpack_require__(2);
 var ctx = __webpack_require__(12);
 var hide = __webpack_require__(8);
+var has = __webpack_require__(9);
 var PROTOTYPE = 'prototype';
 
 var $export = function (type, name, source) {
@@ -145,7 +146,7 @@ var $export = function (type, name, source) {
   for (key in source) {
     // contains in native
     own = !IS_FORCED && target && target[key] !== undefined;
-    if (own && key in exports) continue;
+    if (own && has(exports, key)) continue;
     // export native or passed
     out = own ? target[key] : source[key];
     // prevent global pollution for namespaces
@@ -449,7 +450,7 @@ exports.default = {
     return (_console3 = console).error.apply(_console3, arguments);
   }
 };
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(106)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(105)))
 
 /***/ }),
 /* 24 */
@@ -481,7 +482,6 @@ var LIBRARY = __webpack_require__(27);
 var $export = __webpack_require__(5);
 var redefine = __webpack_require__(61);
 var hide = __webpack_require__(8);
-var has = __webpack_require__(9);
 var Iterators = __webpack_require__(11);
 var $iterCreate = __webpack_require__(62);
 var setToStringTag = __webpack_require__(21);
@@ -508,7 +508,7 @@ module.exports = function (Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCE
   var VALUES_BUG = false;
   var proto = Base.prototype;
   var $native = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT];
-  var $default = (!BUGGY && $native) || getMethod(DEFAULT);
+  var $default = $native || getMethod(DEFAULT);
   var $entries = DEFAULT ? !DEF_VALUES ? $default : getMethod('entries') : undefined;
   var $anyNative = NAME == 'Array' ? proto.entries || $native : $native;
   var methods, key, IteratorPrototype;
@@ -519,7 +519,7 @@ module.exports = function (Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCE
       // Set @@toStringTag to native iterators
       setToStringTag(IteratorPrototype, TAG, true);
       // fix for some old engines
-      if (!LIBRARY && !has(IteratorPrototype, ITERATOR)) hide(IteratorPrototype, ITERATOR, returnThis);
+      if (!LIBRARY && typeof IteratorPrototype[ITERATOR] != 'function') hide(IteratorPrototype, ITERATOR, returnThis);
     }
   }
   // fix Array#{values, @@iterator}.name in V8 / FF
@@ -800,31 +800,32 @@ module.exports = function (C, x) {
 
 /***/ }),
 /* 40 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-/* WEBPACK VAR INJECTION */(function(global) {// Unique ID creation requires a high quality random # generator.  In the
+// Unique ID creation requires a high quality random # generator.  In the
 // browser this is a little complicated due to unknown quality of Math.random()
 // and inconsistent support for the `crypto` API.  We do the best we can via
 // feature-detection
-var rng;
 
-var crypto = global.crypto || global.msCrypto; // for IE 11
-if (crypto && crypto.getRandomValues) {
+// getRandomValues needs to be invoked in a context where "this" is a Crypto implementation.
+var getRandomValues = (typeof(crypto) != 'undefined' && crypto.getRandomValues.bind(crypto)) ||
+                      (typeof(msCrypto) != 'undefined' && msCrypto.getRandomValues.bind(msCrypto));
+if (getRandomValues) {
   // WHATWG crypto RNG - http://wiki.whatwg.org/wiki/Crypto
   var rnds8 = new Uint8Array(16); // eslint-disable-line no-undef
-  rng = function whatwgRNG() {
-    crypto.getRandomValues(rnds8);
+
+  module.exports = function whatwgRNG() {
+    getRandomValues(rnds8);
     return rnds8;
   };
-}
-
-if (!rng) {
+} else {
   // Math.random()-based (RNG)
   //
   // If all else fails, use Math.random().  It's fast, but is of unspecified
   // quality.
   var rnds = new Array(16);
-  rng = function() {
+
+  module.exports = function mathRNG() {
     for (var i = 0, r; i < 16; i++) {
       if ((i & 0x03) === 0) r = Math.random() * 0x100000000;
       rnds[i] = r >>> ((i & 0x03) << 3) & 0xff;
@@ -834,9 +835,6 @@ if (!rng) {
   };
 }
 
-module.exports = rng;
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(100)))
 
 /***/ }),
 /* 41 */
@@ -997,8 +995,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var Provider = {
   init: function init(config) {
-    // Set hidden attribute with script if not present.
-    if (window.self !== window.top && !document.documentElement.hasAttribute('hidden')) {
+    var enforceSecurity = config.secret || config.acls.some(function (x) {
+      return x !== '*';
+    });
+
+    // Set hidden attribute with script if not present and security is being enforced
+    if (enforceSecurity && window.self !== window.top && !document.documentElement.hasAttribute('hidden')) {
       document.documentElement.setAttribute('hidden', null);
 
       // WARNING: Setting hidden attribute with script can be countered by
@@ -1046,11 +1048,11 @@ var _jsonrpcDispatch = __webpack_require__(49);
 
 var _jsonrpcDispatch2 = _interopRequireDefault(_jsonrpcDispatch);
 
-var _string = __webpack_require__(103);
+var _string = __webpack_require__(102);
 
-var _events = __webpack_require__(104);
+var _events = __webpack_require__(103);
 
-var _uri = __webpack_require__(105);
+var _uri = __webpack_require__(104);
 
 var _uri2 = _interopRequireDefault(_uri);
 
@@ -1058,13 +1060,15 @@ var _logger = __webpack_require__(23);
 
 var _logger2 = _interopRequireDefault(_logger);
 
-var _dimension = __webpack_require__(107);
+var _dimension = __webpack_require__(106);
 
-var _mutationObserver = __webpack_require__(108);
+var _mutationObserver = __webpack_require__(107);
 
 var _mutationObserver2 = _interopRequireDefault(_mutationObserver);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1084,23 +1088,37 @@ var Application = function (_EventEmitter) {
 
   _createClass(Application, [{
     key: 'init',
+
+    /**
+     * init method
+     * @param  options.acls            An array that contains white listed origins
+     * @param  options.secret          A string or function used for authorization with Consumer
+     * @param  options.onReady         A function that will be called after App is authorized
+     * @param  options.targetSelectors A DOMString containing one or more selectors to match against.
+     *                                 This string must be a valid CSS selector string; if it's not,
+     *                                 a SyntaxError exception is thrown.
+     */
     value: function init(_ref) {
       var _ref$acls = _ref.acls,
           acls = _ref$acls === undefined ? [] : _ref$acls,
           _ref$secret = _ref.secret,
           secret = _ref$secret === undefined ? null : _ref$secret,
           _ref$onReady = _ref.onReady,
-          onReady = _ref$onReady === undefined ? null : _ref$onReady;
+          onReady = _ref$onReady === undefined ? null : _ref$onReady,
+          _ref$targetSelectors = _ref.targetSelectors,
+          targetSelectors = _ref$targetSelectors === undefined ? '' : _ref$targetSelectors;
 
       this.acls = [].concat(acls);
       this.secret = secret;
       this.onReady = onReady;
+      this.targetSelectors = targetSelectors;
       this.resizeConfig = null;
       this.requestResize = this.requestResize.bind(this);
       this.handleConsumerMessage = this.handleConsumerMessage.bind(this);
       this.authorizeConsumer = this.authorizeConsumer.bind(this);
       this.verifyChallenge = this.verifyChallenge.bind(this);
       this.emitError = this.emitError.bind(this);
+      this.unload = this.unload.bind(this);
 
       // If the document referer (parent frame) origin is trusted, default that
       // to the active ACL;
@@ -1153,6 +1171,20 @@ var Application = function (_EventEmitter) {
         this.JSONRPC.notification('resize', [null, width + 'px']);
       } else {
         var height = (0, _dimension.calculateHeight)(this.resizeConfig.heightCalculationMethod);
+
+        // If targetSelectors is specified from Provider or Consumer or both,
+        // need to calculate the height based on specified target selectors
+        if (this.targetSelectors || this.resizeConfig.targetSelectors) {
+          // Combines target selectors from two sources
+          var targetSelectors = [this.targetSelectors, this.resizeConfig.targetSelectors].filter(function (val) {
+            return val;
+          }).join(', ');
+
+          var heights = [].slice.call(document.querySelectorAll(targetSelectors)).map(_dimension.getOffsetHeightToBody);
+
+          height = Math.max.apply(Math, _toConsumableArray(heights).concat([height]));
+        }
+
         this.JSONRPC.notification('resize', [height + 'px']);
       }
     }
@@ -1212,8 +1244,9 @@ var Application = function (_EventEmitter) {
     key: 'launch',
     value: function launch() {
       if (window.self !== window.top) {
-        // 1: Setup listeners for all incoming communication
+        // 1: Setup listeners for all incoming communication and beforeunload
         window.addEventListener('message', this.handleConsumerMessage);
+        window.addEventListener('beforeunload', this.unload);
 
         // 2: Begin launch and authorization sequence
         this.JSONRPC.notification('launch');
@@ -1224,11 +1257,14 @@ var Application = function (_EventEmitter) {
           return x !== '*';
         })) {
           this.JSONRPC.request('authorizeConsumer', []).then(this.authorizeConsumer).catch(this.emitError);
-        }
 
-        // 2b. We don't know who to trust, challenge parent for secret
-        if (this.secret) {
+          // 2b. We don't know who to trust, challenge parent for secret
+        } else if (this.secret) {
           this.JSONRPC.request('challengeConsumer', []).then(this.verifyChallenge).catch(this.emitError);
+
+          // 2c. acl is '*' and there is no secret, immediately authorize content
+        } else {
+          this.authorizeConsumer();
         }
 
         // If not embedded, immediately authorize content
@@ -1342,6 +1378,16 @@ var Application = function (_EventEmitter) {
     value: function emitError(error) {
       this.emit('xfc.error', error);
     }
+  }, {
+    key: 'unload',
+    value: function unload() {
+      // Need this line because IE11 & some safari trigger onbeforeunload despite presence of download attribute
+      if (document.activeElement && document.activeElement.hasAttribute('download')) {
+        return;
+      }
+      this.JSONRPC.notification('unload');
+      this.trigger('xfc.unload');
+    }
   }]);
 
   return Application;
@@ -1384,7 +1430,7 @@ var _uuid = __webpack_require__(98);
 
 var _uuid2 = _interopRequireDefault(_uuid);
 
-var _errors = __webpack_require__(102);
+var _errors = __webpack_require__(101);
 
 var _errors2 = _interopRequireDefault(_errors);
 
@@ -2098,7 +2144,7 @@ var notify = function (promise, isReject) {
       var resolve = reaction.resolve;
       var reject = reaction.reject;
       var domain = reaction.domain;
-      var result, then;
+      var result, then, exited;
       try {
         if (handler) {
           if (!ok) {
@@ -2108,8 +2154,11 @@ var notify = function (promise, isReject) {
           if (handler === true) result = value;
           else {
             if (domain) domain.enter();
-            result = handler(value);
-            if (domain) domain.exit();
+            result = handler(value); // may throw
+            if (domain) {
+              domain.exit();
+              exited = true;
+            }
           }
           if (result === reaction.promise) {
             reject(TypeError('Promise-chain cycle'));
@@ -2118,6 +2167,7 @@ var notify = function (promise, isReject) {
           } else resolve(result);
         } else reject(value);
       } catch (e) {
+        if (domain && !exited) domain.exit();
         reject(e);
       }
     };
@@ -2800,7 +2850,7 @@ $export($export.S + $export.F * !__webpack_require__(7), 'Object', { definePrope
 
 
 var v1 = __webpack_require__(99);
-var v4 = __webpack_require__(101);
+var v4 = __webpack_require__(100);
 
 var uuid = v4;
 uuid.v1 = v1;
@@ -2820,20 +2870,12 @@ var bytesToUuid = __webpack_require__(41);
 // Inspired by https://github.com/LiosK/UUID.js
 // and http://docs.python.org/library/uuid.html
 
-// random #'s we need to init node and clockseq
-var _seedBytes = rng();
-
-// Per 4.5, create and 48-bit node id, (47 random bits + multicast bit = 1)
-var _nodeId = [
-  _seedBytes[0] | 0x01,
-  _seedBytes[1], _seedBytes[2], _seedBytes[3], _seedBytes[4], _seedBytes[5]
-];
-
-// Per 4.2.2, randomize (14 bit) clockseq
-var _clockseq = (_seedBytes[6] << 8 | _seedBytes[7]) & 0x3fff;
+var _nodeId;
+var _clockseq;
 
 // Previous uuid creation time
-var _lastMSecs = 0, _lastNSecs = 0;
+var _lastMSecs = 0;
+var _lastNSecs = 0;
 
 // See https://github.com/broofa/node-uuid for API details
 function v1(options, buf, offset) {
@@ -2841,8 +2883,26 @@ function v1(options, buf, offset) {
   var b = buf || [];
 
   options = options || {};
-
+  var node = options.node || _nodeId;
   var clockseq = options.clockseq !== undefined ? options.clockseq : _clockseq;
+
+  // node and clockseq need to be initialized to random values if they're not
+  // specified.  We do this lazily to minimize issues related to insufficient
+  // system entropy.  See #189
+  if (node == null || clockseq == null) {
+    var seedBytes = rng();
+    if (node == null) {
+      // Per 4.5, create and 48-bit node id, (47 random bits + multicast bit = 1)
+      node = _nodeId = [
+        seedBytes[0] | 0x01,
+        seedBytes[1], seedBytes[2], seedBytes[3], seedBytes[4], seedBytes[5]
+      ];
+    }
+    if (clockseq == null) {
+      // Per 4.2.2, randomize (14 bit) clockseq
+      clockseq = _clockseq = (seedBytes[6] << 8 | seedBytes[7]) & 0x3fff;
+    }
+  }
 
   // UUID timestamps are 100 nano-second units since the Gregorian epoch,
   // (1582-10-15 00:00).  JSNumbers aren't precise enough for this, so
@@ -2903,7 +2963,6 @@ function v1(options, buf, offset) {
   b[i++] = clockseq & 0xff;
 
   // `node`
-  var node = options.node || _nodeId;
   for (var n = 0; n < 6; ++n) {
     b[i + n] = node[n];
   }
@@ -2916,33 +2975,6 @@ module.exports = v1;
 
 /***/ }),
 /* 100 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var rng = __webpack_require__(40);
@@ -2952,7 +2984,7 @@ function v4(options, buf, offset) {
   var i = buf && offset || 0;
 
   if (typeof(options) == 'string') {
-    buf = options == 'binary' ? new Array(16) : null;
+    buf = options === 'binary' ? new Array(16) : null;
     options = null;
   }
   options = options || {};
@@ -2977,7 +3009,7 @@ module.exports = v4;
 
 
 /***/ }),
-/* 102 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3007,7 +3039,7 @@ module.exports = (0, _freeze2.default)({
 });
 
 /***/ }),
-/* 103 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3034,7 +3066,7 @@ function fixedTimeCompare(v1, v2) {
 exports.fixedTimeCompare = fixedTimeCompare;
 
 /***/ }),
-/* 104 */
+/* 103 */
 /***/ (function(module, exports) {
 
 // Copyright Joyent, Inc. and other Node contributors.
@@ -3342,7 +3374,7 @@ function isUndefined(arg) {
 
 
 /***/ }),
-/* 105 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3375,7 +3407,7 @@ var URI = function URI(uri) {
 exports.default = URI;
 
 /***/ }),
-/* 106 */
+/* 105 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -3565,7 +3597,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 107 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3576,6 +3608,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.calculateHeight = calculateHeight;
 exports.calculateWidth = calculateWidth;
+exports.getOffsetToBody = getOffsetToBody;
+exports.getOffsetHeightToBody = getOffsetHeightToBody;
 
 var _logger = __webpack_require__(23);
 
@@ -3675,8 +3709,42 @@ function calculateWidth() {
   return getWidth[calMethod]();
 }
 
+/**
+ * This function returns the offset height of the given node relative to the top of document.body
+ */
+function getOffsetToBody(node) {
+  var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+
+  // If the given node is body or null, return 0
+  if (!node || node === window.document.body) {
+    return 0;
+  }
+
+  // Stops if the offset parent node is body;
+  // Otherwise keep searching up
+  // NOTE: offsetParent will return null on Webkit if the element is hidden
+  //       (the style.display of this element or any ancestor is "none") or
+  //       if the style.position of the element itself is set to "fixed"
+  //       See reference at https://developer.mozilla.org/en-US/docs/Web/API/HTMLelement/offsetParent#Compatibility
+  var calculatedOffset = node.offsetTop + offset;
+  var offsetParent = node.offsetParent;
+
+  if (offsetParent === window.document.body) {
+    return calculatedOffset;
+  }
+
+  return getOffsetToBody(offsetParent, calculatedOffset);
+}
+
+/**
+ * This function returns the offset height of the given node relative to the top of document.body
+ */
+function getOffsetHeightToBody(node) {
+  return !node ? 0 : getOffsetToBody(node) + node.offsetHeight;
+}
+
 /***/ }),
-/* 108 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
