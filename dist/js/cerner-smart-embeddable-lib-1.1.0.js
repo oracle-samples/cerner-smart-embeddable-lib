@@ -997,8 +997,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var Provider = {
   init: function init(config) {
-    // Set hidden attribute with script if not present.
-    if (window.self !== window.top && !document.documentElement.hasAttribute('hidden')) {
+    var enforceSecurity = config.secret || config.acls.some(function (x) {
+      return x !== '*';
+    });
+
+    // Set hidden attribute with script if not present and security is being enforced
+    if (enforceSecurity && window.self !== window.top && !document.documentElement.hasAttribute('hidden')) {
       document.documentElement.setAttribute('hidden', null);
 
       // WARNING: Setting hidden attribute with script can be countered by
@@ -1066,6 +1070,8 @@ var _mutationObserver2 = _interopRequireDefault(_mutationObserver);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -1084,23 +1090,37 @@ var Application = function (_EventEmitter) {
 
   _createClass(Application, [{
     key: 'init',
+
+    /**
+     * init method
+     * @param  options.acls            An array that contains white listed origins
+     * @param  options.secret          A string or function used for authorization with Consumer
+     * @param  options.onReady         A function that will be called after App is authorized
+     * @param  options.targetSelectors A DOMString containing one or more selectors to match against.
+     *                                 This string must be a valid CSS selector string; if it's not,
+     *                                 a SyntaxError exception is thrown.
+     */
     value: function init(_ref) {
       var _ref$acls = _ref.acls,
           acls = _ref$acls === undefined ? [] : _ref$acls,
           _ref$secret = _ref.secret,
           secret = _ref$secret === undefined ? null : _ref$secret,
           _ref$onReady = _ref.onReady,
-          onReady = _ref$onReady === undefined ? null : _ref$onReady;
+          onReady = _ref$onReady === undefined ? null : _ref$onReady,
+          _ref$targetSelectors = _ref.targetSelectors,
+          targetSelectors = _ref$targetSelectors === undefined ? '' : _ref$targetSelectors;
 
       this.acls = [].concat(acls);
       this.secret = secret;
       this.onReady = onReady;
+      this.targetSelectors = targetSelectors;
       this.resizeConfig = null;
       this.requestResize = this.requestResize.bind(this);
       this.handleConsumerMessage = this.handleConsumerMessage.bind(this);
       this.authorizeConsumer = this.authorizeConsumer.bind(this);
       this.verifyChallenge = this.verifyChallenge.bind(this);
       this.emitError = this.emitError.bind(this);
+      this.unload = this.unload.bind(this);
 
       // If the document referer (parent frame) origin is trusted, default that
       // to the active ACL;
@@ -1153,6 +1173,20 @@ var Application = function (_EventEmitter) {
         this.JSONRPC.notification('resize', [null, width + 'px']);
       } else {
         var height = (0, _dimension.calculateHeight)(this.resizeConfig.heightCalculationMethod);
+
+        // If targetSelectors is specified from Provider or Consumer or both,
+        // need to calculate the height based on specified target selectors
+        if (this.targetSelectors || this.resizeConfig.targetSelectors) {
+          // Combines target selectors from two sources
+          var targetSelectors = [this.targetSelectors, this.resizeConfig.targetSelectors].filter(function (val) {
+            return val;
+          }).join(', ');
+
+          var heights = [].slice.call(document.querySelectorAll(targetSelectors)).map(_dimension.getOffsetHeightToBody);
+
+          height = Math.max.apply(Math, _toConsumableArray(heights).concat([height]));
+        }
+
         this.JSONRPC.notification('resize', [height + 'px']);
       }
     }
@@ -1212,8 +1246,9 @@ var Application = function (_EventEmitter) {
     key: 'launch',
     value: function launch() {
       if (window.self !== window.top) {
-        // 1: Setup listeners for all incoming communication
+        // 1: Setup listeners for all incoming communication and beforeunload
         window.addEventListener('message', this.handleConsumerMessage);
+        window.addEventListener('beforeunload', this.unload);
 
         // 2: Begin launch and authorization sequence
         this.JSONRPC.notification('launch');
@@ -1224,11 +1259,14 @@ var Application = function (_EventEmitter) {
           return x !== '*';
         })) {
           this.JSONRPC.request('authorizeConsumer', []).then(this.authorizeConsumer).catch(this.emitError);
-        }
 
-        // 2b. We don't know who to trust, challenge parent for secret
-        if (this.secret) {
+          // 2b. We don't know who to trust, challenge parent for secret
+        } else if (this.secret) {
           this.JSONRPC.request('challengeConsumer', []).then(this.verifyChallenge).catch(this.emitError);
+
+          // 2c. acl is '*' and there is no secret, immediately authorize content
+        } else {
+          this.authorizeConsumer();
         }
 
         // If not embedded, immediately authorize content
@@ -1341,6 +1379,16 @@ var Application = function (_EventEmitter) {
     key: 'emitError',
     value: function emitError(error) {
       this.emit('xfc.error', error);
+    }
+  }, {
+    key: 'unload',
+    value: function unload() {
+      // Need this line because IE11 & some safari trigger onbeforeunload despite presence of download attribute
+      if (document.activeElement && document.activeElement.hasAttribute('download')) {
+        return;
+      }
+      this.JSONRPC.notification('unload');
+      this.trigger('xfc.unload');
     }
   }]);
 
@@ -3576,6 +3624,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.calculateHeight = calculateHeight;
 exports.calculateWidth = calculateWidth;
+exports.getOffsetToBody = getOffsetToBody;
+exports.getOffsetHeightToBody = getOffsetHeightToBody;
 
 var _logger = __webpack_require__(23);
 
@@ -3673,6 +3723,40 @@ function calculateWidth() {
     _logger2.default.error('\'' + calMethod + '\' is not a valid method name!');
   }
   return getWidth[calMethod]();
+}
+
+/**
+ * This function returns the offset height of the given node relative to the top of document.body
+ */
+function getOffsetToBody(node) {
+  var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+
+  // If the given node is body or null, return 0
+  if (!node || node === window.document.body) {
+    return 0;
+  }
+
+  // Stops if the offset parent node is body;
+  // Otherwise keep searching up
+  // NOTE: offsetParent will return null on Webkit if the element is hidden
+  //       (the style.display of this element or any ancestor is "none") or
+  //       if the style.position of the element itself is set to "fixed"
+  //       See reference at https://developer.mozilla.org/en-US/docs/Web/API/HTMLelement/offsetParent#Compatibility
+  var calculatedOffset = node.offsetTop + offset;
+  var offsetParent = node.offsetParent;
+
+  if (offsetParent === window.document.body) {
+    return calculatedOffset;
+  }
+
+  return getOffsetToBody(offsetParent, calculatedOffset);
+}
+
+/**
+ * This function returns the offset height of the given node relative to the top of document.body
+ */
+function getOffsetHeightToBody(node) {
+  return !node ? 0 : getOffsetToBody(node) + node.offsetHeight;
 }
 
 /***/ }),
@@ -4234,4 +4318,4 @@ module.exports = MutationObserver;
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=cerner-smart-embeddable-lib-1.0.0.js.map
+//# sourceMappingURL=cerner-smart-embeddable-lib-1.1.0.js.map

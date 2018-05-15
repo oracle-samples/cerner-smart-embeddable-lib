@@ -1,6 +1,6 @@
 {
   "name": "cerner-smart-embeddable-lib",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "Cerner Corporation, SMART on FHIR",
   "description": "== README",
   "license": "== LICENSE",
@@ -43,7 +43,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "xfc": "^1.0.2"
+    "xfc": "^1.6.0"
   },
   "sourceFiles": {
     "js": [
