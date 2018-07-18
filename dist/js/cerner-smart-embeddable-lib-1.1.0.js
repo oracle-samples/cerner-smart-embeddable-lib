@@ -1387,12 +1387,14 @@ var Application = function (_EventEmitter) {
   }, {
     key: 'unload',
     value: function unload() {
-      // Need this line because IE11 & some safari trigger onbeforeunload despite presence of download attribute
-      if (document.activeElement && document.activeElement.hasAttribute('download')) {
-        return;
+      // These patterns trigger unload events but don't actually unload the page
+      var protocols = /^(tel|mailto|fax|sms|callto):/;
+      var element = document.activeElement;
+
+      if (!element || !(element.hasAttribute('download') || protocols.test(element.href))) {
+        this.JSONRPC.notification('unload');
+        this.trigger('xfc.unload');
       }
-      this.JSONRPC.notification('unload');
-      this.trigger('xfc.unload');
     }
   }]);
 
