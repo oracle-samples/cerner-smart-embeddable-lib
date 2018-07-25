@@ -945,16 +945,15 @@ var CernerSmartEmbeddableLib = {
   * Initializes the provider wrapper object with ACLs.
   */
   init: function init() {
-    _provider2.default.init({ acls: ['https://embedded.cerner.com', 'https://embedded.sandboxcerner.com', 'https://embedded.devcerner.com'] });
+    _provider2.default.init({
+      acls: ['https://embedded.cerner.com', 'https://embedded.sandboxcerner.com', 'https://embedded.devcerner.com']
+    });
   },
   /**
   * Get the frame height.  The default height is HTML's scrollHeight.
   */
   calcFrameHeight: function calcFrameHeight() {
-    return (
-      // Default height calculation to html scrollHeight
-      window.document.getElementsByTagName('html')[0].scrollHeight
-    );
+    return window.document.getElementsByTagName('html')[0].scrollHeight;
   },
 
   /**
