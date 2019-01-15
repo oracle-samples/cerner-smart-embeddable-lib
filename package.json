@@ -8,6 +8,7 @@
   "less": "src/less/manifest.less",
   "main": "lib/js/index.js",
   "files": [
+    "dist",
     "lib",
     "src"
   ],
