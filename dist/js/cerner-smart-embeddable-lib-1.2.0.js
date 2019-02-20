@@ -917,6 +917,7 @@ _cernerSmartEmbeddableLib2.default.listenForCustomFrameHeight();
 
 window.CernerSmartEmbeddableLib = window.CernerSmartEmbeddableLib || {};
 window.CernerSmartEmbeddableLib.calcFrameHeight = _cernerSmartEmbeddableLib2.default.calcFrameHeight;
+window.CernerSmartEmbeddableLib.setFrameHeight = _cernerSmartEmbeddableLib2.default.setFrameHeight;
 
 /***/ }),
 /* 46 */
@@ -4329,4 +4330,4 @@ module.exports = MutationObserver;
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=cerner-smart-embeddable-lib-1.1.0.js.map
+//# sourceMappingURL=cerner-smart-embeddable-lib-1.2.0.js.map
