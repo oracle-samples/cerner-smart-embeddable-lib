@@ -1391,7 +1391,7 @@ var Application = function (_EventEmitter) {
       var protocols = /^(tel|mailto|fax|sms|callto):/;
       var element = document.activeElement;
 
-      if (!element || protocols.test(element.href))) {
+      if (!element || !(protocols.test(element.href))) {
         this.JSONRPC.notification('unload');
         this.trigger('xfc.unload');
       }
