@@ -1035,7 +1035,7 @@ var Provider = function () {
       });
 
       // Set hidden attribute with script if not present and security is being enforced
-      if (enforceSecurity && window.self !== window.top) {
+      if (enforceSecurity && window.self !== window.top && !(document.documentElement.hasAttribute && document.documentElement.hasAttribute('hidden'))) {
         document.documentElement.setAttribute('hidden', null);
 
         // WARNING: Setting hidden attribute with script can be countered by
@@ -1451,7 +1451,7 @@ var Application = function (_EventEmitter) {
       var protocols = /^(tel|mailto|fax|sms|callto):/;
       var element = document.activeElement;
 
-      if (!element || !(false || protocols.test(element.href))) {
+      if (!element || !(element.hasAttribute && element.hasAttribute('download') || protocols.test(element.href))) {
         this.JSONRPC.notification('unload');
         this.trigger('xfc.unload');
       }
