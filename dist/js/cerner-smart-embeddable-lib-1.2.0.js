@@ -1451,7 +1451,7 @@ var Application = function (_EventEmitter) {
       var protocols = /^(tel|mailto|fax|sms|callto):/;
       var element = document.activeElement;
 
-      if (!element || !(element.hasAttribute('download') || protocols.test(element.href))) {
+      if (!element || !(false || protocols.test(element.href))) {
         this.JSONRPC.notification('unload');
         this.trigger('xfc.unload');
       }
