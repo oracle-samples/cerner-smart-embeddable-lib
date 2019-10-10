@@ -2,13 +2,12 @@
 
 import CernerSmartEmbeddableLib from './cerner-smart-embeddable-lib';
 
+
 window.CernerSmartEmbeddableLib = window.CernerSmartEmbeddableLib || {};
-console.log(typeof 'CCLINK' === typeof Functions);
-console.log(window);
-if (typeof 'CCLINK' === typeof Functions) {
+
+if (window.parent.frames.length <= 1) {
   CernerSmartEmbeddableLib.init();
   CernerSmartEmbeddableLib.listenForCustomFrameHeight();
-  console.log('Hello Millenium User');
   window.CernerSmartEmbeddableLib.calcFrameHeight = CernerSmartEmbeddableLib.calcFrameHeight;
   window.CernerSmartEmbeddableLib.setFrameHeight = CernerSmartEmbeddableLib.setFrameHeight;
 }
