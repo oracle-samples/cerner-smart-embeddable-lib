@@ -914,16 +914,14 @@ var _cernerSmartEmbeddableLib2 = _interopRequireDefault(_cernerSmartEmbeddableLi
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 window.CernerSmartEmbeddableLib = window.CernerSmartEmbeddableLib || {};
-// console.log(typeof 'CCLINK' === typeof Functions);
+console.log(_typeof('CCLINK') === (typeof Functions === 'undefined' ? 'undefined' : _typeof(Functions)));
 
 window.CernerSmartEmbeddableLib.embedded = _typeof('CCLLINK') === (typeof Functions === 'undefined' ? 'undefined' : _typeof(Functions));
-if (true) {
-  _cernerSmartEmbeddableLib2.default.init();
-  _cernerSmartEmbeddableLib2.default.listenForCustomFrameHeight();
+_cernerSmartEmbeddableLib2.default.init();
+_cernerSmartEmbeddableLib2.default.listenForCustomFrameHeight();
 
-  window.CernerSmartEmbeddableLib.calcFrameHeight = _cernerSmartEmbeddableLib2.default.calcFrameHeight;
-  window.CernerSmartEmbeddableLib.setFrameHeight = _cernerSmartEmbeddableLib2.default.setFrameHeight;
-}
+window.CernerSmartEmbeddableLib.calcFrameHeight = _cernerSmartEmbeddableLib2.default.calcFrameHeight;
+window.CernerSmartEmbeddableLib.setFrameHeight = _cernerSmartEmbeddableLib2.default.setFrameHeight;
 
 /***/ }),
 /* 46 */
