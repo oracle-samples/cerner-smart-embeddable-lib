@@ -914,9 +914,8 @@ var _cernerSmartEmbeddableLib2 = _interopRequireDefault(_cernerSmartEmbeddableLi
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 window.CernerSmartEmbeddableLib = window.CernerSmartEmbeddableLib || {};
-console.log(_typeof('CCLINK') === (typeof Functions === 'undefined' ? 'undefined' : _typeof(Functions)));
 
-window.CernerSmartEmbeddableLib.embedded = _typeof('CCLLINK') === (typeof Functions === 'undefined' ? 'undefined' : _typeof(Functions));
+window.CernerSmartEmbeddableLib.embedded = _typeof('CCLLINK') === (typeof Function === 'undefined' ? 'undefined' : _typeof(Function));
 _cernerSmartEmbeddableLib2.default.init();
 _cernerSmartEmbeddableLib2.default.listenForCustomFrameHeight();
 

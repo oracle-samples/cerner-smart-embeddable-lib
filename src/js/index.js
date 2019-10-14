@@ -3,9 +3,8 @@
 import CernerSmartEmbeddableLib from './cerner-smart-embeddable-lib';
 
 window.CernerSmartEmbeddableLib = window.CernerSmartEmbeddableLib || {};
-console.log(typeof 'CCLINK' === typeof Functions);
 
-window.CernerSmartEmbeddableLib.embedded = typeof 'CCLLINK' === typeof Functions;
+window.CernerSmartEmbeddableLib.embedded = typeof 'CCLLINK' === typeof Function;
 CernerSmartEmbeddableLib.init();
 CernerSmartEmbeddableLib.listenForCustomFrameHeight();
 
