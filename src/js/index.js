@@ -6,7 +6,7 @@ window.CernerSmartEmbeddableLib = window.CernerSmartEmbeddableLib || {};
 // console.log(typeof 'CCLINK' === typeof Functions);
 
 window.CernerSmartEmbeddableLib.embedded = typeof 'CCLLINK' === typeof Functions;
-if (false) {
+if (true) {
   CernerSmartEmbeddableLib.init();
   CernerSmartEmbeddableLib.listenForCustomFrameHeight();
 
