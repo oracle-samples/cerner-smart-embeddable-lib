@@ -1,9 +1,11 @@
 /* globals window */
 
+// eslint-disable-next-line no-unused-vars
 import CernerSmartEmbeddableLib from './cerner-smart-embeddable-lib';
 
 window.CernerSmartEmbeddableLib = window.CernerSmartEmbeddableLib || {};
-if (window.gon.embedded) {
+
+if (window.location !== window.parent.location) {
   CernerSmartEmbeddableLib.init();
   CernerSmartEmbeddableLib.listenForCustomFrameHeight();
 
