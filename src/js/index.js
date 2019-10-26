@@ -3,7 +3,7 @@
 // eslint-disable-next-line no-unused-vars
 import CernerSmartEmbeddableLib from './cerner-smart-embeddable-lib';
 
-if (window.CernerSmartEmbeddableLib.isEmbedded) {
+if (window.gon.isEmbedded) {
   CernerSmartEmbeddableLib.init();
   CernerSmartEmbeddableLib.listenForCustomFrameHeight();
 
