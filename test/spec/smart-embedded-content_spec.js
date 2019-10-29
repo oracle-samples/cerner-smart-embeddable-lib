@@ -10,7 +10,7 @@ describe('CernerSmartEmbeddableLib', () => {
 
       const option = {
         acls: ['https://embedded.cerner.com', 'https://embedded.sandboxcerner.com', 'https://embedded.devcerner.com',
-          'https://*.devhealtheintent.com', 'https://*.staginghealtheintent.com', 'https://*.healtheintent.com'],
+          'https://*.devhealtheintent.com', 'https://*.staginghealtheintent.com', 'https://*.healtheintent.com', 'http://localhost:*'],
       };
       expect(Provider.init).toHaveBeenCalledWith(option);
     });
