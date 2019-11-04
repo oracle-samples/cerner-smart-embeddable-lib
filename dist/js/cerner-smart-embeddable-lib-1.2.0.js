@@ -911,13 +911,16 @@ var _cernerSmartEmbeddableLib2 = _interopRequireDefault(_cernerSmartEmbeddableLi
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_cernerSmartEmbeddableLib2.default.init(); /* globals window */
+if (window.external && typeof window.external.DiscernObjectFactory !== 'undefined') {
+  _cernerSmartEmbeddableLib2.default.init();
+  _cernerSmartEmbeddableLib2.default.listenForCustomFrameHeight();
 
-_cernerSmartEmbeddableLib2.default.listenForCustomFrameHeight();
+  window.CernerSmartEmbeddableLib = window.CernerSmartEmbeddableLib || {};
+  window.CernerSmartEmbeddableLib.calcFrameHeight = _cernerSmartEmbeddableLib2.default.calcFrameHeight;
+  window.CernerSmartEmbeddableLib.setFrameHeight = _cernerSmartEmbeddableLib2.default.setFrameHeight;
+} /* globals window */
 
-window.CernerSmartEmbeddableLib = window.CernerSmartEmbeddableLib || {};
-window.CernerSmartEmbeddableLib.calcFrameHeight = _cernerSmartEmbeddableLib2.default.calcFrameHeight;
-window.CernerSmartEmbeddableLib.setFrameHeight = _cernerSmartEmbeddableLib2.default.setFrameHeight;
+// eslint-disable-next-line no-unused-vars
 
 /***/ }),
 /* 46 */
@@ -947,7 +950,7 @@ var CernerSmartEmbeddableLib = {
   */
   init: function init() {
     _provider2.default.init({
-      acls: ['https://embedded.cerner.com', 'https://embedded.sandboxcerner.com', 'https://embedded.devcerner.com']
+      acls: ['https://embedded.cerner.com', 'https://embedded.sandboxcerner.com', 'https://embedded.devcerner.com', 'https://*.devhealtheintent.com', 'https://*.staginghealtheintent.com', 'https://*.healtheintent.com']
     });
   },
   /**
