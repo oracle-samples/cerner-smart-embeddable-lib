@@ -36,9 +36,11 @@
     "lint-js": "eslint ./src/js/*.js --config .eslintrc --fix",
     "test": "karma start test/karma.conf.js --single-run --no-auto-watch",
     "debug": "karma start test/karma.conf.js --browsers=Chrome --no-single-run --auto-watch --debug",
-    "release:major": "npm test && node ./scripts/release/release.js major",
-    "release:minor": "npm test && node ./scripts/release/release.js minor",
-    "release:patch": "npm test && node ./scripts/release/release.js patch"
+    "prepare": "npm run build",
+    "prepublishOnly": "npm whoami && npm test",
+    "release:major": "node ./scripts/release/release.js major",
+    "release:minor": "node ./scripts/release/release.js minor",
+    "release:patch": "node ./scripts/release/release.js patch"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
