@@ -4,9 +4,9 @@ In order to run any SMART app in Cerner's MPage view (iframe), the following pro
 
 This library uses [xfc](https://github.com/cerner/xfc) to solve [Clickjacking](https://www.owasp.org/index.php/Clickjacking) problem for all browsers.
 
-## Installation
+## NPM Module (Recommended)
 
-This is an npm project and can be installed with the following: 
+Install with the following: 
 ```shell
 npm install cerner-smart-embeddable-lib
 ```
