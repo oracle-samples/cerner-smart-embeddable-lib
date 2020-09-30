@@ -16,8 +16,6 @@ Include it to your project with the following:
 import 'cerner-smart-embeddable-lib';
 ```
 
-The minified & transpiled files are also available in the `dist/` directory and can be used with a `<script>` tag. 
-
 It is suggested to import the module (as opposed to including the pre-minified file from `dist/`) as it will allow Webpack to define `process.env.NODE_ENV` which will enable or disable XFC logging. Per the [XFC Readme](https://github.com/cerner/xfc#usage), logging is only enabled in non-production environments. The environment can be set in webpack using the DefinePlugin:
 
 ```js
@@ -34,7 +32,10 @@ module.exports = {
 };
 ```
 
-Warning: Disable XFC logging if using [F-Twelve](https://github.com/cerner/f-twelve/). F-Twelve writes to the DOM every time `console.log` is called and (when logging is enabled) XFC calls `console.log` every time the DOM is written to. This causes the browser to endlessly loop and freeze. It is safe to use both concurrently if XFC logging is disabled. 
+**Warning:** Disable XFC logging if using [F-Twelve](https://github.com/cerner/f-twelve/). F-Twelve writes to the DOM every time `console.log` is called and (when logging is enabled) XFC calls `console.log` every time the DOM is written to. This causes the browser to endlessly loop and freeze. It is safe to use both concurrently if XFC logging is disabled. 
+
+## Script Include (NOT recommended) 
+If the import method described above is not an option, the transpiled bundle files are available in the `dist/` directory and can be used with a `<script>` tag. This is not suggested because the logging cannot be disabled via webpack (see warning above). 
 
 
 ## Dependency
