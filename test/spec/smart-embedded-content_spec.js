@@ -1,5 +1,5 @@
 import SmartEmbeddedContent from 'js/cerner-smart-embeddable-lib'
-import Provider from 'xfc/src/provider';
+import { Provider } from 'xfc';
 
 describe('CernerSmartEmbeddableLib', () => {
   describe('init', () => {

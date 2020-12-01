@@ -4,9 +4,39 @@ In order to run any SMART app in Cerner's MPage view (iframe), the following pro
 
 This library uses [xfc](https://github.com/cerner/xfc) to solve [Clickjacking](https://www.owasp.org/index.php/Clickjacking) problem for all browsers.
 
-## Availability
+## NPM Module (Recommended)
 
-This project is an npm project.  The minified & transpiled files are also available in the `dist/` directory.
+Install with the following: 
+```shell
+npm install cerner-smart-embeddable-lib
+```
+
+Include it to your project with the following: 
+```js
+import 'cerner-smart-embeddable-lib';
+```
+
+It is suggested to import the module (as opposed to including the pre-minified file from `dist/`) as it will allow Webpack to define `process.env.NODE_ENV` which will enable or disable XFC logging. Per the [XFC Readme](https://github.com/cerner/xfc#usage), logging is only enabled in non-production environments. The environment can be set in webpack using the DefinePlugin:
+
+```js
+// webpack.config.js
+const webpack = require('webpack');
+
+module.exports = {
+  /*...*/
+  plugins:[
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production')
+    })
+  ]
+};
+```
+
+**Warning:** Disable XFC logging if using [F-Twelve](https://github.com/cerner/f-twelve/). F-Twelve writes to the DOM every time `console.log` is called and (when logging is enabled) XFC calls `console.log` every time the DOM is written to. This causes the browser to endlessly loop and freeze. It is safe to use both concurrently if XFC logging is disabled. 
+
+## Script Include (NOT recommended) 
+If the import method described above is not an option, the transpiled bundle files are available in the `dist/` directory and can be used with a `<script>` tag. This is not suggested because the logging cannot be disabled via webpack (see warning above). 
+
 
 ## Dependency
 

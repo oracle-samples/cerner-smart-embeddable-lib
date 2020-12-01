@@ -1,6 +1,6 @@
 /* global window */
 
-import Provider from 'xfc/src/provider';
+import { Provider } from 'xfc';
 
 /**
 * Wrapper object to initialize the provider's content

@@ -7,3 +7,4 @@ CernerSmartEmbeddableLib.listenForCustomFrameHeight();
 
 window.CernerSmartEmbeddableLib = window.CernerSmartEmbeddableLib || {};
 window.CernerSmartEmbeddableLib.calcFrameHeight = CernerSmartEmbeddableLib.calcFrameHeight;
+window.CernerSmartEmbeddableLib.setFrameHeight = CernerSmartEmbeddableLib.setFrameHeight;
