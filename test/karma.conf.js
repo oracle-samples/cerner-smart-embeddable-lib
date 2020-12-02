@@ -17,9 +17,9 @@ webpackConfig.module = {
       use: ['babel-loader'],
     },
     {
-      enforce: 'pre',
+      enforce: 'post',
       test: /\.js?$/,
-      use: ['isparta-loader'],
+      use: { loader: 'istanbul-instrumenter-loader' },
       include: path.resolve('src/js/'),
     },
     {
@@ -72,10 +72,8 @@ module.exports = function(config) {
       dir: 'target/reports/coverage',
       reporters: [
         { type: 'html', subdir: 'report-html' },
-        { type: 'lcov', subdir: 'report-lcov' },
-        { type: 'cobertura', subdir: '.', file: 'cobertura.txt' },
-        { type: 'text-summary' },
-      ]
+        { type: 'text-summary', subdir:'.', file: 'text-summary.txt' },
+      ],
     },
     webpack: webpackConfig,
     webpackMiddleware: { noInfo: true },
