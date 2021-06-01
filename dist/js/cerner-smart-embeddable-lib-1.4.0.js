@@ -5249,7 +5249,15 @@ function getComputedStyle(prop) {
   } else {
     result = document.defaultView.getComputedStyle(el, null);
   }
-  return result !== null ? parseInt(result[prop], 10) : 0;
+  var res = void 0;
+  if (typeof parseInt === 'function') {
+    res = parseInt(result[prop], 10);
+  } else {
+    res = 0;
+    _logger2.default.error('getComputedStyle -> parseInt is undefined');
+    console.log('getComputedStyle -> parseInt is undefined');
+  }
+  return result !== null ? res : 0;
 }
 
 function getAllMeasures(dimension) {
