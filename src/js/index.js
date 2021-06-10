@@ -1,5 +1,5 @@
 /* globals window */
-import './polyfillToTry';
+
 import CernerSmartEmbeddableLib from './cerner-smart-embeddable-lib';
 
 CernerSmartEmbeddableLib.init();
