@@ -2337,6 +2337,11 @@ var CernerSmartEmbeddableLib = {
     _xfc.Provider.init({
       acls: ['https://embedded.cerner.com', 'https://embedded.sandboxcerner.com', 'https://embedded.devcerner.com']
     });
+    console.log('******* Adding in onerror handler to capture errors.');
+    window.onerror = function (message, url, lineNumber) {
+      console.log('******* Cerner-Smart-Embeddable-Lib : Error was handled in frame inner :', message, url, lineNumber);
+      return true;
+    };
   },
   /**
   * Get the frame height.  The default height is HTML's scrollHeight.
