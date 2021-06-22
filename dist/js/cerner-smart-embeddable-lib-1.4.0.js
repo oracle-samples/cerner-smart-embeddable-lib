@@ -1960,6 +1960,21 @@ exports.default = void 0;
 
 var _consumer = _interopRequireDefault(__webpack_require__(64));
 
+if (!Object.entries) {
+  Object.entries = function (obj) {
+    var ownProps = Object.keys(obj);
+    var i = ownProps.length;
+    var resArray = new Array(i); // preallocate the Array
+
+    while (i) {
+      resArray[i] = [ownProps[i], obj[ownProps[i]]];
+      i -= 1;
+    }
+
+    return resArray;
+  };
+}
+
 var _default = new _consumer.default();
 
 exports.default = _default;
