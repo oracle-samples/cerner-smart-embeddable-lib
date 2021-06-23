@@ -46,7 +46,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "xfc": "git://github.com/shriniketsarkar/xfc.git#xfc-1.10.1-onerror-fix"
+    "xfc": "^1.8.1"
   },
   "sourceFiles": {
     "js": [
