@@ -13,7 +13,7 @@ const CernerSmartEmbeddableLib = {
   */
   init: () => {
     Provider.init({
-      acls: ['https://embedded.cerner.com',
+      acls: ['https://embedded.test.devcernerpowerchart.com', 'https://embedded.cerner.com',
         'https://embedded.sandboxcerner.com', 'https://embedded.devcerner.com'],
     });
   },
