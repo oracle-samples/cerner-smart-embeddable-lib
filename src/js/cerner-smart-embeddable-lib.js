@@ -2,6 +2,12 @@
 
 import { Provider } from 'xfc';
 
+const predefinedACLs = [
+  'https://embedded.cerner.com',
+  'https://embedded.sandboxcerner.com',
+  'https://embedded.devcerner.com',
+];
+
 /**
 * Wrapper object to initialize the provider's content
 * to allow content to embed inside an iframe.
@@ -11,12 +17,10 @@ const CernerSmartEmbeddableLib = {
   /**
   * Initializes the provider wrapper object with ACLs.
   */
-  init: () => {
-    Provider.init({
-      acls: ['https://embedded.cerner.com',
-        'https://embedded.sandboxcerner.com', 'https://embedded.devcerner.com'],
-    });
+  init: (acls = predefinedACLs) => {
+    Provider.init({ acls });
   },
+
   /**
   * Get the frame height.  The default height is HTML's scrollHeight.
   */
@@ -29,6 +33,7 @@ const CernerSmartEmbeddableLib = {
   setFrameHeight: (h) => {
     Provider.trigger('iframeCustomResizer', { height: h });
   },
+
   /**
   * Listen for iframeCustomResizer message.
   * Calculate the frame height in px and set the height.
