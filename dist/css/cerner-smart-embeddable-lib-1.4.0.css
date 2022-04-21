@@ -1,9 +1,0 @@
-/*
-  Style the html5 hidden attribute for older browsers
-  More info: https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/hidden
-*/
-html[hidden] {
-  display: none;
-}
-
-/*# sourceMappingURL=cerner-smart-embeddable-lib-1.4.0.css.map*/
