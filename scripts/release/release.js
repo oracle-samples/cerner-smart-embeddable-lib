@@ -3,7 +3,9 @@ const shell = require('shelljs');
 
 const releaseType = process.argv[2] || 'patch';
 
-if (shell.exec(`npm run build && npm version ${releaseType} -m "Released version %s" && npm publish && git push`).code !== 0) {
+// npm version triggers scripts added in package.json to test, build, commit, tag and push changes with version update to git.
+// If the tests fail when ran with preversion script entire release will fail.
+if (shell.exec(`npm version ${releaseType} -m "Tagged and released version %s" && npm publish`).code !== 0) {
   shell.exit(1);
 }
 

@@ -38,6 +38,9 @@
     "debug": "karma start test/karma.conf.js --browsers=Chrome --no-single-run --auto-watch --debug",
     "prepare": "npm run build",
     "prepublishOnly": "npm whoami && npm test",
+    "preversion": "npm run test",
+    "version": "npm run build && git add -A",
+    "postversion": "git push && git push --tags && rm -rf build/temp",
     "release:major": "node ./scripts/release/release.js major",
     "release:minor": "node ./scripts/release/release.js minor",
     "release:patch": "node ./scripts/release/release.js patch"
