@@ -3,7 +3,7 @@ const shell = require('shelljs');
 
 const releaseType = process.argv[2] || 'patch';
 
-if (shell.exec(`npm run build && npm version ${releaseType} -m "Released version %s" && npm publish && git push`).code !== 0) {
+if (shell.exec(`npm version ${releaseType} -m "Released version %s" && npm run build && git push`).code !== 0) {
   shell.exit(1);
 }
 
