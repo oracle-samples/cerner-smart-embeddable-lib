@@ -6,7 +6,7 @@ The release script will release the npm package given a release type (major, min
 node scripts/release/release.js major
 ```
 ## Steps in the release process:
-1. Trigger tests with old npm version
+1. Trigger tests with the old version
 2. Updates version based on the change type (e.g major, minor, patch, etc)
 3. Rebuilds the lib using new version to regenerate ```lib``` and ```dist``` folders (this includes running tests with new lib version)
 4. Commits and tags the repo for the latest changes.
