@@ -4,7 +4,7 @@
 The release script will release the npm package given a release type (major, minor, or patch). If no type is given, patch will be used.
 
 ```
-node scripts/release/release.js major
+node scripts/release/release.js minor
 ```
 ## Explanation of steps in the release process:
 Once the above ```node``` command gets executed the following takes place automatically:
