@@ -4,11 +4,19 @@ This project is hosted on NPM.  You can see it [here][project-url].
 
 Releasing the project requires these steps:
 
-0. Set the version number in the code
-1. Use a GitHub [project release][github-release-url] to release the project and tag (be sure it follows [semver][semantic-versioning])
-2. `npm publish` (make sure it's uploaded to [npm][project-url])
-3. Update `master` to a new minor version
+1. Clone the project and execute the following node command : 
+   
+   NOTE : If you do not choose the correct type of change i.e major, minor or patch then patch will be used to release the package. This follows the [semantic-versioning].
+
+   ```
+   node scripts/release/release.js minor
+   ``` 
+
+2. The above release script should automatically update the package version and regenerate assets in ```dist``` & ```lib``` folders. Once assets are regenerated the script commits and tags the changes and will push them to remote and `npm publish` will be triggered automatically.
+3. Once publish is complete make sure it's uploaded to [npm][project-url]
+
+Further explanation on the automated steps behind the ```release.js``` script can be found [here][release-documentation]
 
 [project-url]: https://www.npmjs.com/package/cerner-smart-embeddable-lib
+[release-documentation]: https://github.com/cerner/cerner-smart-embeddable-lib/blob/master/scripts/release/README.md
 [semantic-versioning]: http://semver.org/
-[github-release-url]: https://help.github.com/articles/creating-releases/
