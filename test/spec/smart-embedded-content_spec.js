@@ -10,6 +10,7 @@ describe('CernerSmartEmbeddableLib', () => {
 
       const option = {
         acls: ['https://embedded.cerner.com',
+               'https://embedded.certificationapplications.integrationcerner.com',
                'https://embedded.sandboxcerner.com',
                'https://embedded.devcerner.com',
                'https://embedded.applications.ca.cerner.com',

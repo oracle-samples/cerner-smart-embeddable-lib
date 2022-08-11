@@ -14,6 +14,7 @@ const CernerSmartEmbeddableLib = {
   init: () => {
     Provider.init({
       acls: ['https://embedded.cerner.com',
+        'https://embedded.certificationapplications.integrationcerner.com',
         'https://embedded.sandboxcerner.com', 'https://embedded.devcerner.com',
         'https://embedded.applications.ca.cerner.com', 'https://embedded.ca.cernerpowerchart.net',
         'https://embedded.applications.au.cerner.com', 'https://embedded.au.cernerpowerchart.net',
