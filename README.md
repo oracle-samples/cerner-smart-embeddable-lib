@@ -13,7 +13,14 @@ npm install cerner-smart-embeddable-lib
 
 Include it to your project with the following: 
 ```js
-import 'cerner-smart-embeddable-lib';
+import CernerSmartEmbeddableLib from 'cerner-smart-embeddable-lib';
+```
+
+Initiate with the following (passing an optional object with an array of additional ACLs):
+```js
+CernerSmartEmbeddableLib({
+  additionalAcls: []
+});
 ```
 
 It is suggested to import the module (as opposed to including the pre-minified file from `dist/`) as it will allow Webpack to define `process.env.NODE_ENV` which will enable or disable XFC logging. Per the [XFC Readme](https://github.com/cerner/xfc#usage), logging is only enabled in non-production environments. The environment can be set in webpack using the DefinePlugin:

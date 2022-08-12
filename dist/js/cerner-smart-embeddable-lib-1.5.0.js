@@ -2297,19 +2297,33 @@ __webpack_require__(80);
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _cernerSmartEmbeddableLib = __webpack_require__(81);
 
 var _cernerSmartEmbeddableLib2 = _interopRequireDefault(_cernerSmartEmbeddableLib);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_cernerSmartEmbeddableLib2.default.init(); /* globals window */
+/**
+ *
+ * @param options
+ * @constructor
+ */
+var SmartEmbeddedContent = function SmartEmbeddedContent() {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-_cernerSmartEmbeddableLib2.default.listenForCustomFrameHeight();
+  _cernerSmartEmbeddableLib2.default.init(options);
+  _cernerSmartEmbeddableLib2.default.listenForCustomFrameHeight();
 
-window.CernerSmartEmbeddableLib = window.CernerSmartEmbeddableLib || {};
-window.CernerSmartEmbeddableLib.calcFrameHeight = _cernerSmartEmbeddableLib2.default.calcFrameHeight;
-window.CernerSmartEmbeddableLib.setFrameHeight = _cernerSmartEmbeddableLib2.default.setFrameHeight;
+  window.CernerSmartEmbeddableLib = window.CernerSmartEmbeddableLib || {};
+  window.CernerSmartEmbeddableLib.calcFrameHeight = _cernerSmartEmbeddableLib2.default.calcFrameHeight;
+  window.CernerSmartEmbeddableLib.setFrameHeight = _cernerSmartEmbeddableLib2.default.setFrameHeight;
+}; /* global window */
+
+exports.default = SmartEmbeddedContent;
 
 /***/ }),
 /* 81 */
@@ -2324,6 +2338,8 @@ Object.defineProperty(exports, "__esModule", {
 
 var _xfc = __webpack_require__(82);
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } } /* global window */
+
 /**
 * Wrapper object to initialize the provider's content
 * to allow content to embed inside an iframe.
@@ -2333,11 +2349,15 @@ var CernerSmartEmbeddableLib = {
   /**
   * Initializes the provider wrapper object with ACLs.
   */
-  init: function init() {
+  init: function init(_ref) {
+    var _ref$additionalAcls = _ref.additionalAcls,
+        additionalAcls = _ref$additionalAcls === undefined ? [] : _ref$additionalAcls;
+
     _xfc.Provider.init({
-      acls: ['https://embedded.cerner.com', 'https://embedded.sandboxcerner.com', 'https://embedded.devcerner.com', 'https://embedded.applications.ca.cerner.com', 'https://embedded.ca.cernerpowerchart.net', 'https://embedded.applications.au.cerner.com', 'https://embedded.au.cernerpowerchart.net', 'https://embedded.emea-2.cerner.com']
+      acls: ['https://embedded.cerner.com', 'https://embedded.sandboxcerner.com', 'https://embedded.devcerner.com', 'https://embedded.applications.ca.cerner.com', 'https://embedded.ca.cernerpowerchart.net', 'https://embedded.applications.au.cerner.com', 'https://embedded.au.cernerpowerchart.net', 'https://embedded.emea-2.cerner.com'].concat(_toConsumableArray(additionalAcls))
     });
   },
+
   /**
   * Get the frame height.  The default height is HTML's scrollHeight.
   */
@@ -2352,6 +2372,7 @@ var CernerSmartEmbeddableLib = {
   setFrameHeight: function setFrameHeight(h) {
     _xfc.Provider.trigger('iframeCustomResizer', { height: h });
   },
+
   /**
   * Listen for iframeCustomResizer message.
   * Calculate the frame height in px and set the height.
@@ -2362,7 +2383,7 @@ var CernerSmartEmbeddableLib = {
       CernerSmartEmbeddableLib.setFrameHeight(height);
     });
   }
-}; /* global window */
+};
 
 exports.default = CernerSmartEmbeddableLib;
 
