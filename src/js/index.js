@@ -1,4 +1,4 @@
-/* global window */
+/* globals window */
 
 import CernerSmartEmbeddableLib from './cerner-smart-embeddable-lib';
 
