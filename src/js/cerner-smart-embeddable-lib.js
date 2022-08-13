@@ -11,15 +11,17 @@ const CernerSmartEmbeddableLib = {
   /**
   * Initializes the provider wrapper object with ACLs.
   */
-  init: () => {
+  init: ({ additionalAcls = [] }) => {
     Provider.init({
       acls: ['https://embedded.cerner.com',
         'https://embedded.sandboxcerner.com', 'https://embedded.devcerner.com',
         'https://embedded.applications.ca.cerner.com', 'https://embedded.ca.cernerpowerchart.net',
         'https://embedded.applications.au.cerner.com', 'https://embedded.au.cernerpowerchart.net',
-        'https://embedded.emea-2.cerner.com'],
+        'https://embedded.emea-2.cerner.com',
+        ...additionalAcls],
     });
   },
+
   /**
   * Get the frame height.  The default height is HTML's scrollHeight.
   */
@@ -32,6 +34,7 @@ const CernerSmartEmbeddableLib = {
   setFrameHeight: (h) => {
     Provider.trigger('iframeCustomResizer', { height: h });
   },
+
   /**
   * Listen for iframeCustomResizer message.
   * Calculate the frame height in px and set the height.

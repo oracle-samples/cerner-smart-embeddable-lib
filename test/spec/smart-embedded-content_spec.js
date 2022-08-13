@@ -1,25 +1,49 @@
 import SmartEmbeddedContent from 'js/cerner-smart-embeddable-lib'
 import { Provider } from 'xfc';
 
+const DEFAULT_ACLS = ['https://embedded.cerner.com',
+  'https://embedded.sandboxcerner.com',
+  'https://embedded.devcerner.com',
+  'https://embedded.applications.ca.cerner.com',
+  'https://embedded.ca.cernerpowerchart.net',
+  'https://embedded.applications.au.cerner.com',
+  'https://embedded.au.cernerpowerchart.net',
+  'https://embedded.emea-2.cerner.com'
+];
+
 describe('CernerSmartEmbeddableLib', () => {
   describe('init', () => {
-    it('initializes Provider with correct ACLs', () => {
+    it('initializes Provider with default ACLs', () => {
 
       spyOn(Provider, 'init');
-      SmartEmbeddedContent.init();
+      SmartEmbeddedContent.init({});
 
-      const option = {
-        acls: ['https://embedded.cerner.com',
-               'https://embedded.sandboxcerner.com',
-               'https://embedded.devcerner.com',
-               'https://embedded.applications.ca.cerner.com',
-               'https://embedded.ca.cernerpowerchart.net',
-               'https://embedded.applications.au.cerner.com',
-               'https://embedded.au.cernerpowerchart.net',
-               'https://embedded.emea-2.cerner.com'
-               ]
+      const options = {
+        acls: DEFAULT_ACLS
       };
-      expect(Provider.init).toHaveBeenCalledWith(option);
+
+      expect(Provider.init).toHaveBeenCalledWith(options);
+    });
+
+    it('initializes Provider with additional ACLs', () => {
+
+      spyOn(Provider, 'init');
+      SmartEmbeddedContent.init({
+        additionalAcls: [
+          'https://bobs.burgers.com',
+          '*.foo.bar'
+        ]
+      });
+
+      const options = {
+        acls: [
+          ...DEFAULT_ACLS,
+          'https://bobs.burgers.com',
+          '*.foo.bar'
+        ]
+      };
+
+      expect(Provider.init).toHaveBeenCalledWith(options);
     });
   });
 
