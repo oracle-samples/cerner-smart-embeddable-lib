@@ -42,6 +42,12 @@ const CernerSmartEmbeddableLib = {
       CernerSmartEmbeddableLib.setFrameHeight(height);
     });
   },
+  /**
+   * COM API invocation with specified Api name and corresponding params
+   */
+  invokeComApi: function invokeComApi(Apiname, params) {
+    Provider.trigger('invokeCOMApi', { name: Apiname, params });
+  }
 };
 
 export default CernerSmartEmbeddableLib;
