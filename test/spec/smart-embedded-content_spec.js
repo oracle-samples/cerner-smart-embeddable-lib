@@ -47,4 +47,14 @@ describe('CernerSmartEmbeddableLib', () => {
       expect(Provider.on).toHaveBeenCalledWith('iframeCustomResizer', jasmine.any(Function))
     });
   });
+  
+  describe('invokeCOMApi', () => {
+    it('trigger invokeCOMApi', () => {
+      spyOn(Provider, 'trigger');
+      /** Sample data based on cerner wiki - https://wiki.cerner.com/display/public/MPDEVWIKI/APPLINK */
+      const ApplinkParams = {'mode':100, 'launchMode': 'https://www.oracle.com', 'commandlineargs':''}
+      SmartEmbeddedContent.invokeComApi('APPLINK', ApplinkParams);
+      expect(Provider.trigger).toHaveBeenCalledWith('invokeCOMApi', {name: 'APPLINK', params: ApplinkParams})
+    });
+  });
 });
