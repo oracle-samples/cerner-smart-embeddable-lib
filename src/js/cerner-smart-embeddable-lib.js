@@ -42,16 +42,16 @@ const CernerSmartEmbeddableLib = {
       CernerSmartEmbeddableLib.setFrameHeight(height);
     });
   },
-   /**
+  /**
    * API invocation with specified name and corresponding params.
-   * COM Api have several api's with different parameter implementation. In general it have a Api name
-   * and set of the params.
-   * @param {string} name   - API name required to invoke
-   * @param {object} params - Any number of parameters that passed to API 
+   * COM Api have several api's with different parameter implementation.
+   * In general it have a Api name and set of the params.
+   * @param {string} apiName   - API name required to invoke
+   * @param {object} params - Any number of parameters that passed to API
    */
-   invokeAPI: function invokeAPI(Apiname, params) {
+  invokeAPI: function invokeAPI(apiName, params) {
     // Trigger COM Api specific event 'invokeCOMApi'
-    Provider.trigger('invokeCOMApi', { name: Apiname, params });
+    Provider.trigger('invokeCOMApi', { name: apiName, params });
   }
 };
 

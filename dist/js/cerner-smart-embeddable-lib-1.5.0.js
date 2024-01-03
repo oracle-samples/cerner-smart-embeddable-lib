@@ -2310,7 +2310,7 @@
   window.CernerSmartEmbeddableLib = window.CernerSmartEmbeddableLib || {};
   window.CernerSmartEmbeddableLib.calcFrameHeight = _cernerSmartEmbeddableLib2.default.calcFrameHeight;
   window.CernerSmartEmbeddableLib.setFrameHeight = _cernerSmartEmbeddableLib2.default.setFrameHeight;
-  window.CernerSmartEmbeddableLib.invokeCOMApi = _cernerSmartEmbeddableLib2.default.invokeComApi;
+  window.CernerSmartEmbeddableLib.invokeAPI = _cernerSmartEmbeddableLib2.default.invokeAPI;
   
   /***/ }),
   /* 81 */
@@ -2364,10 +2364,15 @@
       });
     },
     /**
-     * COM API invocation with specified Api name and corresponding params
+     * API invocation with specified name and corresponding params.
+     * COM Api have several api's with different parameter implementation.
+     * In general it have a Api name and set of the params.
+     * @param {string} apiName   - API name required to invoke
+     * @param {object} params - Any number of parameters that passed to API
      */
-    invokeComApi: function invokeComApi(Apiname, params) {
-      _xfc.Provider.trigger('invokeCOMApi', { name: Apiname, params: params });
+    invokeAPI: function invokeAPI(apiName, params) {
+      // Trigger COM Api specific event 'invokeCOMApi'
+      _xfc.Provider.trigger('invokeCOMApi', { name: apiName, params: params });
     }
   }; /* global window */
   
