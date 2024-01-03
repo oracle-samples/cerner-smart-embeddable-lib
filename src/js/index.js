@@ -8,4 +8,4 @@ CernerSmartEmbeddableLib.listenForCustomFrameHeight();
 window.CernerSmartEmbeddableLib = window.CernerSmartEmbeddableLib || {};
 window.CernerSmartEmbeddableLib.calcFrameHeight = CernerSmartEmbeddableLib.calcFrameHeight;
 window.CernerSmartEmbeddableLib.setFrameHeight = CernerSmartEmbeddableLib.setFrameHeight;
-window.CernerSmartEmbeddableLib.invokeCOMApi = CernerSmartEmbeddableLib.invokeComApi;
+window.CernerSmartEmbeddableLib.invokeApi = CernerSmartEmbeddableLib.invokeApi;
