@@ -46,7 +46,7 @@ const CernerSmartEmbeddableLib = {
    * API invocation with specified name and corresponding params.
    * COM Api have several api's with different parameter implementation.
    * In general it have a Api name and set of the params.
-   * @param {string} apiName   - API name required to invoke
+   * @param {string} apiName  - API name required to invoke
    * @param {object} params - Any number of parameters that passed to API
    */
   invokeAPI: function invokeAPI(apiName, params) {
