@@ -48,8 +48,10 @@ const CernerSmartEmbeddableLib = {
    * @param {object} params - Any number of parameters that passed to API, not null or undefined 
    */
   invokeAPI: function invokeAPI(apiName, params) {
-    // Trigger COM Api specific event 'invokeCOMApi'
-    Provider.trigger('invokeCOMApi', { name: apiName, params });
+    if (apiName && params) {
+      // Trigger COM Api specific event 'invokeCOMApi'
+      Provider.trigger('invokeCOMApi', { name: apiName, params });
+    }
   }
 };
 

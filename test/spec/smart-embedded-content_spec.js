@@ -48,12 +48,12 @@ describe('CernerSmartEmbeddableLib', () => {
     });
   });
   
-  describe('invokeCOMApi', () => {
+  describe('invokeAPI', () => {
     it('trigger invokeCOMApi', () => {
       spyOn(Provider, 'trigger');
       /** Sample data based on cerner wiki - https://wiki.cerner.com/display/public/MPDEVWIKI/APPLINK */
       const ApplinkParams = {'mode':100, 'launchMode': 'https://www.oracle.com', 'commandlineargs':''}
-      SmartEmbeddedContent.invokeComApi('APPLINK', ApplinkParams);
+      SmartEmbeddedContent.invokeAPI('APPLINK', ApplinkParams);
       expect(Provider.trigger).toHaveBeenCalledWith('invokeCOMApi', {name: 'APPLINK', params: ApplinkParams})
     });
   });
