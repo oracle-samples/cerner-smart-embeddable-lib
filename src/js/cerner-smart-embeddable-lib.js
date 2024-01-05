@@ -43,11 +43,9 @@ const CernerSmartEmbeddableLib = {
     });
   },
   /**
-   * API invocation with specified name and corresponding params.
-   * COM Api have several api's with different parameter implementation.
-   * In general it have a Api name and set of the params.
-   * @param {string} apiName  - API name required to invoke
-   * @param {object} params - Any number of parameters that passed to API
+   * API invocation with specified name and corresponding params
+   * @param {string} apiName   - API name required to invoke, not null  or undefined 
+   * @param {object} params - Any number of parameters that passed to API, not null or undefined 
    */
   invokeAPI: function invokeAPI(apiName, params) {
     // Trigger COM Api specific event 'invokeCOMApi'
