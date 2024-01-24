@@ -5967,17 +5967,21 @@ Object.defineProperty(exports, "__esModule", {
 /* global window */
 
 /**
-* Wrapper object to override com objects.
-*/
+ * Wrapper object to override com objects.
+ */
 var ComOverrider = {
   /**
-     * Overrides the COM objects if the SMART app is loaded in embedded mode
-     * @param cernerSmartEmbeddableLib The Cerner Smart Embeddable Lib object
-     */
+   * Overrides the COM objects if the SMART app is loaded in embedded mode
+   * @param cernerSmartEmbeddableLib The Cerner Smart Embeddable Lib object
+   */
   override: function override(cernerSmartEmbeddableLib) {
     if (window.self !== window.top) {
       window.APPLINK = function (linkMode, launchObject, commandLineArgs) {
-        return cernerSmartEmbeddableLib.invokeAPI('APPLINK', { linkMode: linkMode, launchObject: launchObject, commandLineArgs: commandLineArgs });
+        return cernerSmartEmbeddableLib.invokeAPI('APPLINK', {
+          linkMode: linkMode,
+          launchObject: launchObject,
+          commandLineArgs: commandLineArgs
+        });
       };
     }
   }
