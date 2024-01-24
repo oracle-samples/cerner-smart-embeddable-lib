@@ -2301,15 +2301,22 @@ var _cernerSmartEmbeddableLib = __webpack_require__(81);
 
 var _cernerSmartEmbeddableLib2 = _interopRequireDefault(_cernerSmartEmbeddableLib);
 
+var _comOverrider = __webpack_require__(157);
+
+var _comOverrider2 = _interopRequireDefault(_comOverrider);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_cernerSmartEmbeddableLib2.default.init(); /* globals window */
+/* globals window */
 
+_cernerSmartEmbeddableLib2.default.init();
 _cernerSmartEmbeddableLib2.default.listenForCustomFrameHeight();
 
 window.CernerSmartEmbeddableLib = window.CernerSmartEmbeddableLib || {};
 window.CernerSmartEmbeddableLib.calcFrameHeight = _cernerSmartEmbeddableLib2.default.calcFrameHeight;
 window.CernerSmartEmbeddableLib.setFrameHeight = _cernerSmartEmbeddableLib2.default.setFrameHeight;
+
+_comOverrider2.default.override(_cernerSmartEmbeddableLib2.default);
 
 /***/ }),
 /* 81 */
@@ -2361,6 +2368,17 @@ var CernerSmartEmbeddableLib = {
       var height = window.CernerSmartEmbeddableLib.calcFrameHeight() + 'px';
       CernerSmartEmbeddableLib.setFrameHeight(height);
     });
+  },
+  /**
+   * API invocation with specified name and corresponding params
+   * @param {string} apiName   - API name required to invoke, not null  or undefined
+   * @param {object} params - Any number of parameters that passed to API, not null or undefined
+   */
+  invokeAPI: function invokeAPI(apiName, params) {
+    if (apiName && params) {
+      // Trigger COM Api specific event 'invokeCOMApi'
+      _xfc.Provider.trigger('invokeCOMApi', { name: apiName, params: params });
+    }
   }
 }; /* global window */
 
@@ -5935,6 +5953,36 @@ if (!MutationObserver) {
 }
 
 module.exports = MutationObserver;
+
+/***/ }),
+/* 157 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/* global window */
+
+/**
+* Wrapper object to override com objects.
+*/
+var ComOverrider = {
+  /**
+     * Overrides the COM objects if the SMART app is loaded in embedded mode
+     * @param cernerSmartEmbeddableLib The Cerner Smart Embeddable Lib object
+     */
+  override: function override(cernerSmartEmbeddableLib) {
+    if (window.self !== window.top) {
+      window.APPLINK = function (linkMode, launchObject, commandLineArgs) {
+        return cernerSmartEmbeddableLib.invokeAPI('APPLINK', { linkMode: linkMode, launchObject: launchObject, commandLineArgs: commandLineArgs });
+      };
+    }
+  }
+};
+exports.default = ComOverrider;
 
 /***/ })
 /******/ ]);
