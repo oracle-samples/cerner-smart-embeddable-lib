@@ -50,8 +50,7 @@ describe('CernerSmartEmbeddableLib', () => {
 
   describe('invokeAPI', () => {
     it('trigger invokeCOMApi', () => {
-      spyOn(Provider, 'trigger');
-      /** Sample data based on cerner wiki - https://wiki.cerner.com/display/public/MPDEVWIKI/APPLINK */
+      spyOn(Provider, 'trigger');      
       const ApplinkParams = {'linkMode':100, 'launchObject': 'https://www.oracle.com', 'commandLineArgs':''};
       SmartEmbeddedContent.invokeAPI('APPLINK', ApplinkParams);
       expect(Provider.trigger).toHaveBeenCalledWith('invokeCOMApi', {name: 'APPLINK', params: ApplinkParams});
@@ -59,7 +58,6 @@ describe('CernerSmartEmbeddableLib', () => {
 
     it('does not trigger invokeCOMApi when api name is empty', () => {
       spyOn(Provider, 'trigger');
-      /** Sample data based on cerner wiki - https://wiki.cerner.com/display/public/MPDEVWIKI/APPLINK */
       const ApplinkParams = {'linkMode':100, 'launchObject': 'https://www.oracle.com', 'commandLineArgs':''};
       SmartEmbeddedContent.invokeAPI('', ApplinkParams);
       expect(Provider.trigger).not.toHaveBeenCalled();
@@ -67,7 +65,6 @@ describe('CernerSmartEmbeddableLib', () => {
 
     it('does not trigger invokeCOMApi when params are not provided', () => {
       spyOn(Provider, 'trigger');
-      /** Sample data based on cerner wiki - https://wiki.cerner.com/display/public/MPDEVWIKI/APPLINK */
       const ApplinkParams = null;
       SmartEmbeddedContent.invokeAPI('APPLINK', ApplinkParams);
       expect(Provider.trigger).not.toHaveBeenCalled();
