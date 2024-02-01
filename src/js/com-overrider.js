@@ -6,6 +6,7 @@
 const ComOverrider = {
   /**
    * Overrides the COM objects if the SMART app is loaded in embedded mode and within Edge browser.
+   * Currently overrides APPLINK only.
    * @param cernerSmartEmbeddableLib The Cerner Smart Embeddable Lib object
    */
   override: (cernerSmartEmbeddableLib) => {
