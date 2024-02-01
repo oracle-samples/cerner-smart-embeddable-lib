@@ -44,7 +44,30 @@ describe('CernerSmartEmbeddableLib', () => {
       spyOn(Provider, 'on');
       SmartEmbeddedContent.listenForCustomFrameHeight();
 
-      expect(Provider.on).toHaveBeenCalledWith('iframeCustomResizer', jasmine.any(Function))
+      expect(Provider.on).toHaveBeenCalledWith('iframeCustomResizer', jasmine.any(Function));
+    });
+  });
+
+  describe('invokeAPI', () => {
+    it('trigger invokeCOMApi', () => {
+      spyOn(Provider, 'trigger');      
+      const ApplinkParams = {'linkMode':100, 'launchObject': 'https://www.oracle.com', 'commandLineArgs':''};
+      SmartEmbeddedContent.invokeAPI('APPLINK', ApplinkParams);
+      expect(Provider.trigger).toHaveBeenCalledWith('invokeCOMApi', {name: 'APPLINK', params: ApplinkParams});
+    });
+
+    it('does not trigger invokeCOMApi when api name is empty', () => {
+      spyOn(Provider, 'trigger');
+      const ApplinkParams = {'linkMode':100, 'launchObject': 'https://www.oracle.com', 'commandLineArgs':''};
+      SmartEmbeddedContent.invokeAPI('', ApplinkParams);
+      expect(Provider.trigger).not.toHaveBeenCalled();
+    });
+
+    it('does not trigger invokeCOMApi when params are not provided', () => {
+      spyOn(Provider, 'trigger');
+      const ApplinkParams = null;
+      SmartEmbeddedContent.invokeAPI('APPLINK', ApplinkParams);
+      expect(Provider.trigger).not.toHaveBeenCalled();
     });
   });
 });
