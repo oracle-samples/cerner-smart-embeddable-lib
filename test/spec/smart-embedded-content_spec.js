@@ -16,7 +16,8 @@ describe('CernerSmartEmbeddableLib', () => {
                'https://embedded.ca.cernerpowerchart.net',
                'https://embedded.applications.au.cerner.com',
                'https://embedded.au.cernerpowerchart.net',
-               'https://embedded.emea-2.cerner.com'
+               'https://embedded.emea-2.cerner.com',
+               'https://embedded.applications.uae-1.cerner.com'
                ]
       };
       expect(Provider.init).toHaveBeenCalledWith(option);

@@ -17,7 +17,7 @@ const CernerSmartEmbeddableLib = {
         'https://embedded.sandboxcerner.com', 'https://embedded.devcerner.com',
         'https://embedded.applications.ca.cerner.com', 'https://embedded.ca.cernerpowerchart.net',
         'https://embedded.applications.au.cerner.com', 'https://embedded.au.cernerpowerchart.net',
-        'https://embedded.emea-2.cerner.com'],
+        'https://embedded.emea-2.cerner.com', 'https://embedded.applications.uae-1.cerner.com'],
     });
   },
   /**
