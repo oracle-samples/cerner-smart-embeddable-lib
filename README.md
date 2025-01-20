@@ -154,11 +154,15 @@ The Content-Security-Policy frame-ancestors header does not have full support fr
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md)
+This project welcomes contributions from the community. Before submitting a pull request, please review our contribution guide
 
-## LICENSE
+## Security
 
-Copyright 2017 Cerner Innovation, Inc.
+Please consult the [security guide](./SECURITY.md) for our responsible security vulnerability disclosure process
+
+## License
+
+Copyright (c) 2017, 2025 Oracle and/or its affiliates.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
